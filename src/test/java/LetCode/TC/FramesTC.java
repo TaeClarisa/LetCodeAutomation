@@ -1,30 +1,29 @@
 package LetCode.TC;
 
 import LetCode.Pages.Frames;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.junit.Assert;
 
 public class FramesTC {
 
     Frames frameCases = new Frames();
-  public void TestPageWithIframes(){
-      frameCases.clickDialog();
-      frameCases.enterDetails();
+
+    public void TestPageWithIframes() {
+        frameCases.clickDialog();
+        frameCases.enterDetails();
         /*Validation of Form Tittle*/
-      String actualFormTittle = frameCases.getFormTittle();
-      System.out.println(actualFormTittle);
+        String actualFormTittle = frameCases.getFormTittle();
+        System.out.println(actualFormTittle);
 
-      String expectedFormTittle = "Enter Details";
-      Assert.assertTrue("The form tittle is: "+actualFormTittle,actualFormTittle.contains(expectedFormTittle));
+        String expectedFormTittle = "Enter Details";
+        Assert.assertTrue("The form tittle is: " + actualFormTittle, actualFormTittle.contains(expectedFormTittle));
 
-      /*Validation of Page Tittle*/
-      String actualPageTittle=frameCases.getPageTittle();
-      System.out.println(actualPageTittle);
-      String expectedPageTittle = "Frame";
+        /*Validation of Page Tittle*/
+        String actualPageTittle = frameCases.getPageTittle();
+        System.out.println(actualPageTittle);
+        String expectedPageTittle = "Frame";
 
-      Assert.assertTrue("The page tittle is: "+actualPageTittle,actualPageTittle.contains(expectedPageTittle));
+        Assert.assertTrue("The page tittle is: " + actualPageTittle, actualPageTittle.contains(expectedPageTittle));
 
 
-
-  }
+    }
 }
