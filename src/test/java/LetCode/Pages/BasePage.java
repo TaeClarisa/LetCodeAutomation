@@ -6,13 +6,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.time.Duration;
 
 public class BasePage {
     protected static WebDriver driver;
@@ -20,7 +22,7 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         try {
-            this.driver = getDriver(this.browser);
+            BasePage.driver = getDriver(browser);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,16 +56,25 @@ public class BasePage {
             .pollingEvery(Duration.ofSeconds(2))
             .ignoring(Exception.class, StaleElementReferenceException.class);
 
-   /* public static void waitFor(){
-        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver);
-        wait.withTimeout(Duration.ofSeconds(2));
-        wait.pollingEvery(Duration.ofSeconds(6));
-        wait.ignoring(Exception.class, StaleElementReferenceException.class);
+    /*----------Instances----------*/
+    Actions action = new Actions(driver);
+
+    /*Find Element/s*/
+    //This method return an element to interact with it
+    public WebElement findElement(By element) {
+        waitFor.until(ExpectedConditions.visibilityOfElementLocated(element));
+        return driver.findElement(element);
+    }
+
+    //This method return all the elements in a list
+    /*public List<WebElement> findAllElements(By element) {
+        waitFor.until(ExpectedConditions.visibilityOfElementLocated(element));
+        return driver.findElements(element);
     }*/
 
-
-    public WebElement findElement(By element) {
-        return driver.findElement((By) element);
+    public List<WebElement> findAllElements(By element) {
+        waitFor.until(ExpectedConditions.visibilityOfElementLocated(element));
+        return driver.findElements(element);
     }
 
     /*--Driver Navigation Commands--*/
@@ -71,7 +82,8 @@ public class BasePage {
     public static void navigateTo(String url) {
         Dimension d = new Dimension(1024, 768);
         driver.navigate().to(url);
-        driver.manage().window().setSize(d);
+        //driver.manage().window().setSize(d);
+        driver.manage().window().maximize();
     }
 
     //Back one page with back button
@@ -104,11 +116,32 @@ public class BasePage {
         return findElement(element).getText();
     }
 
-    /*Actions*/
-//Click and Hold button
+    /*-------------ACTIONS------------*/
+    /*Click and Hold button*/
     public void clickAndHold(By element) {
-        Actions action = new Actions(driver);
-        action.clickAndHold().perform();
+        action.clickAndHold().build().perform();
+    }
+
+    /*Drag and Drop*/
+    //This method firstly performs a click-and-hold on the source element,
+    // moves to the location of the target element and then releases the mouse.
+    public void dragAndDrop(By dragElement, By dropElement) {
+        action.dragAndDrop(findElement(dragElement), findElement(dropElement)).build().perform();
+    }
+
+    //This method firstly performs a click-and-hold on the source element,
+    // moves to the given offset and then releases the mouse.
+
+    public void dragAnDropBy(By dragElement, By dropElement, int x, int y) {
+        Dimension target = findElement(dropElement).getRect().getDimension();
+        int height = findElement(dropElement).getSize().getHeight();
+        int width = findElement(dropElement).getSize().getWidth();
+        System.out.println("Height: " + height + "Width: " + width);
+        try {
+            action.dragAndDropBy(findElement(dragElement), x, y).build().perform();
+        } catch (MoveTargetOutOfBoundsException outOfBoundsException) {
+            System.out.println("*** Out of bounded " + "Height: " + height + "Width: " + width + " ***");
+        }
     }
 
     /*Select*/
@@ -130,7 +163,7 @@ public class BasePage {
         select.selectByVisibleText(text);
     }
 
-    //Get all the options as String of the dropdwon and return as List of String
+    //Get all dropdown options as String and return as List of String
     public List<String> getAllOptions(By element) {
         Select select = new Select(findElement(element));
         List<WebElement> allOptions = select.getOptions();
@@ -195,18 +228,21 @@ public class BasePage {
         Set<String> windowHandles = driver.getWindowHandles();
         List<String> windowHandlesList = new ArrayList<>(windowHandles);
         driver.switchTo().window(windowHandlesList.get(index));
-        System.out.println(driver.getCurrentUrl().toString());
+        System.out.println(driver.getCurrentUrl());
     }
 
-    // Opens a new tab and switches to new tab
+    // Opens a new tab and switches to new tab - new implementations according Selenium dev
     public void switchNewTab() {
         driver.switchTo().newWindow(WindowType.TAB);
     }
 
-    // Opens a new window and switches to new window
+    // Opens a new window and switches to new window - new implementations according Selenium dev
     public void switchNewWindow() {
         driver.switchTo().newWindow(WindowType.WINDOW);
     }
-
-
 }
+
+
+
+
+
