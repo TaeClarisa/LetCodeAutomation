@@ -72,14 +72,20 @@ public class PageSuite {
     }
 
     @Test
-    public void testingSortElements() throws InterruptedException {
+    public void testingSortElements() {
         SortTC tc8 = new SortTC();
         tc8.testingSortSingleElement();
     }
 
+    @Test
+    public void testingMultiSelect() {
+        MultiSelectTC tc9 = new MultiSelectTC();
+        tc9.testingMultiSelect();
+    }
+
     @AfterClass
     public static void closeBrowser() {
-        driver.quit();
+        //driver.quit();
     }
 
 

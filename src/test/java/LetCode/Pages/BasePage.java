@@ -131,7 +131,6 @@ public class BasePage {
 
     //This method firstly performs a click-and-hold on the source element,
     // moves to the given offset and then releases the mouse.
-
     public void dragAnDropBy(By dragElement, By dropElement, int x, int y) {
         Dimension target = findElement(dropElement).getRect().getDimension();
         int height = findElement(dropElement).getSize().getHeight();
@@ -141,6 +140,19 @@ public class BasePage {
             action.dragAndDropBy(findElement(dragElement), x, y).build().perform();
         } catch (MoveTargetOutOfBoundsException outOfBoundsException) {
             System.out.println("*** Out of bounded " + "Height: " + height + "Width: " + width + " ***");
+        }
+    }
+
+    //Select all elements in a list
+    public void selectAll(By elements) {
+        List<WebElement> elementList = findAllElements(elements);
+        for (WebElement e : elementList) {
+            action
+                    .sendKeys(Keys.CONTROL)
+                    .moveToElement(e)
+                    .click()
+                    .sendKeys(Keys.CONTROL)
+                    .perform();
         }
     }
 
