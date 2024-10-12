@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 public class PageSuite {
     static WebDriver driver = null;
     static String browser = "Chrome";
+
     static final String urlLetCode = "https://letcode.in/test";
 
     @BeforeClass
@@ -20,7 +21,6 @@ public class PageSuite {
             throw new RuntimeException(e);
         }
         BasePage.navigateTo(urlLetCode);
-
     }
 
     @Test

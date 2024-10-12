@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 public class BasePage {
-    protected static WebDriver driver;
+    protected static WebDriver
+            driver;
     private static String browser;
 
     public BasePage(WebDriver driver) {
@@ -28,9 +29,9 @@ public class BasePage {
         }
     }
 
-    public static WebDriver getDriver(String browser) throws Exception {
+    public static WebDriver getDriver(String setBrowser) throws Exception {
         if (driver == null) {
-            switch (browser.toLowerCase()) {
+            switch (setBrowser.toLowerCase()) {
                 case "chrome": {
                     WebDriverManager.chromedriver().setup();
                     driver = new ChromeDriver();
